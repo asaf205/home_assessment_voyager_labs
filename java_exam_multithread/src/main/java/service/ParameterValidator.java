@@ -7,8 +7,8 @@ public class ParameterValidator {
         }
 
         String startUrl = args[0];
-        Integer maxUrls;
-        Integer maxDepth;
+        int maxUrls;
+        int maxDepth;
         try {
             maxUrls = Integer.parseInt(args[1]);
             maxDepth = Integer.parseInt(args[2]);
@@ -30,12 +30,8 @@ public class ParameterValidator {
         }
     }
 
-    public static boolean parseBoolean(String value) {
-        if (value.equalsIgnoreCase("true")) {
-            return true;
-        } else if (value.equalsIgnoreCase("false")) {
-            return false;
-        } else {
+    public static void parseBoolean(String value) {
+        if (!(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false"))) {
             throw new IllegalArgumentException("Invalid argument type. maxUrls and maxDepth should be integers, and crossLevelUniqueness should be a boolean.");
         }
     }
