@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
@@ -20,9 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static service.CrawlingWorker.PREFIX_FOR_RUN;
 
 public class CrawlingWorkerTest {
-
-    @TempDir
-    Path tempDir;
 
     private Set<String> generalUniqueUrls;
     private Set<String> uniqueUrlsPerLevel;
@@ -37,12 +33,11 @@ public class CrawlingWorkerTest {
     @AfterEach
     public void cleanup() throws IOException {
         // Delete the temporary directory and its contents
-        if (tempDir != null) {
-            Files.walk(Paths.get(PREFIX))
+        Path path = Paths.get(PREFIX);
+        Files.walk(path)
                     .map(Path::toFile)
                     .forEach(File::delete);
-            Files.deleteIfExists(tempDir);
-        }
+            Files.deleteIfExists(path);
     }
 
     @Test
@@ -60,8 +55,6 @@ public class CrawlingWorkerTest {
         // Verify that the URLs are added to the sets
         assertTrue(generalUniqueUrls.isEmpty());
         assertTrue(uniqueUrlsPerLevel.isEmpty());
-        assertFalse(generalUniqueUrls.contains(url));
-        assertFalse(uniqueUrlsPerLevel.contains(url));
     }
 
     @Test

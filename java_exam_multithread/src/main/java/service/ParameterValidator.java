@@ -7,14 +7,12 @@ public class ParameterValidator {
         }
 
         String startUrl = args[0];
-        Integer maxUrls = null;
-        Integer maxDepth = null;
-        Boolean crossLevelUniqueness = null;
-
+        Integer maxUrls;
+        Integer maxDepth;
         try {
             maxUrls = Integer.parseInt(args[1]);
             maxDepth = Integer.parseInt(args[2]);
-            crossLevelUniqueness = parseBoolean(args[3]);
+            parseBoolean(args[3]);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid argument type. maxUrls and maxDepth should be integers, and crossLevelUniqueness should be a boolean.");
         }

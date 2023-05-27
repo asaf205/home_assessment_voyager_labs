@@ -26,8 +26,8 @@ public class CrawlerManager {
 
         while (depth.get() <= maxDepth) {
             ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-            Set<String> finalUniqueUrlsPerLevel = new ConcurrentSkipListSet<>(); //to sum up the quinine urls for each level and the reset the list
-            finalUniqueUrlsPerLevel.addAll(sharedUniqueUrlsPerLevel);
+            //to sum up the quinine urls for each level and the reset the list
+            Set<String> finalUniqueUrlsPerLevel = new ConcurrentSkipListSet<>(sharedUniqueUrlsPerLevel);
             sharedUniqueUrlsPerLevel = new ConcurrentSkipListSet<>();
             
             for (String extractedUrl : finalUniqueUrlsPerLevel) {
