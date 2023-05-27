@@ -1,6 +1,8 @@
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import service.CrawlingWorker;
+
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutorService;
@@ -44,8 +46,11 @@ public class CrawlerManager {
                 log.error("Thread execution was interrupted: {}", e.getMessage());
             }
             depth.set(depth.get() + 1);
-
         }
 
+    }
+
+    public Set<String> getAllUrls(){
+        return new HashSet<>(sharedGeneralUniqueUrls);
     }
 }

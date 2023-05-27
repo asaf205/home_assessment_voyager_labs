@@ -1,9 +1,11 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import service.ParameterValidator;
 
 class CrawlerManagerTest {
 
     @Test
-    void testProcessUrl_withZeroMaxUrls() {
+    void testProcessUrl_withZeroMaxUrls_should_return_empty_set() {
         CrawlerManager crawlerManager = new CrawlerManager();
         int maxUrls = 0;
         int maxDepth = 3;
@@ -11,11 +13,12 @@ class CrawlerManagerTest {
         boolean crossLevelUniqueness = true;
 
         crawlerManager.processUrl(maxUrls, maxDepth, url, crossLevelUniqueness);
+        Assertions.assertTrue(crawlerManager.getAllUrls().isEmpty());
 
     }
 
     @Test
-    void testProcessUrl_withNegativeMaxDepth_shuold() {
+    void testProcessUrl_withNegativeMaxDepth_should_return_empty_set() {
         CrawlerManager crawlerManager = new CrawlerManager();
         int maxUrls = 10;
         int maxDepth = -1;
@@ -23,7 +26,7 @@ class CrawlerManagerTest {
         boolean crossLevelUniqueness = true;
 
         crawlerManager.processUrl(maxUrls, maxDepth, url, crossLevelUniqueness);
-
+        Assertions.assertTrue(crawlerManager.getAllUrls().isEmpty());
     }
 
     @Test
@@ -34,8 +37,8 @@ class CrawlerManagerTest {
         String url = null; // Null URL
         boolean crossLevelUniqueness = true;
 
-        crawlerManager.processUrl(maxUrls, maxDepth, url, crossLevelUniqueness);
-
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> crawlerManager.processUrl(maxUrls, maxDepth, url, crossLevelUniqueness));
+        Assertions.assertEquals("startUrl cannot be null or empty.", exception.getMessage());
     }
 
 }

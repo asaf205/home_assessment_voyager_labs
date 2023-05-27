@@ -38,6 +38,7 @@ public class CrawlingWorker {
     }
 
     public void savePage(String url, int depth, String html) {
+
         String fileName = url.replaceFirst("^(http[s]?://)", "")
                 .replaceAll("[^a-zA-Z0-9-_\\.]", "_") + ".html";
         String folderName = String.valueOf(depth);

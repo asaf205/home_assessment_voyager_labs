@@ -23,6 +23,9 @@ public class UrlExtractor {
 
     //extract urls from the document
     public void extract(Set<String> generalUniqueUrls, Set<String> currentUniqueUrlsPeLevel, boolean crossLevelUniqueness) {
+        if (document == null){
+            return;
+        }
         List<String> hrefList = document.select("a[href]").eachAttr("abs:href");
         int sumOfTheNewAddedUrls = 0;
         log.info("Number of links found: {}", hrefList.size());

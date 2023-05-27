@@ -12,9 +12,12 @@ import java.net.URL;
 public class UrlFetcherUtils{
 
     public Document fetchUrlDocument(String url) {
+        if (url == null){
+            throw new IllegalArgumentException("startUrl cannot be null or empty.");
+        }
         Document document = null;
         try {
-            document = Jsoup.connect(url).get();
+            document =  Jsoup.connect(url).get();
         } catch (IOException e) {
             log.error("Failed to fetch URL document: {}", e.getMessage());
         } catch (IllegalArgumentException e){
