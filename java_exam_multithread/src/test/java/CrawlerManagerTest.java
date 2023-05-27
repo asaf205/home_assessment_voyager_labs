@@ -1,6 +1,5 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import service.ParameterValidator;
 
 class CrawlerManagerTest {
 
