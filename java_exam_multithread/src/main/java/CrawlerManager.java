@@ -17,24 +17,25 @@ public class CrawlerManager {
     private static final int WAITING_TIME = 10;
     private static final int INITIALIZE_DEPTH = 0;
     private static Set<String> sharedGeneralUniqueUrls = new ConcurrentSkipListSet<>();
-    private static Set<String> sharedUniqueUrlsPerLevel = new ConcurrentSkipListSet<>();
-
 
     public void processUrl(int maxUrls, int maxDepth, String url, boolean crossLevelUniqueness) {
 
-        AtomicInteger depth = new AtomicInteger(1);
-        CrawlingWorker worker = new CrawlingWorker(maxUrls, url, INITIALIZE_DEPTH, crossLevelUniqueness);
-        worker.execute(sharedGeneralUniqueUrls, sharedUniqueUrlsPerLevel);
+        AtomicInteger depth = new AtomicInteger(0);
+        Set<String> urlsForIterationInLevel = new ConcurrentSkipListSet<>();
+        if (url == null){
+            throw new IllegalArgumentException("startUrl cannot be null or empty.");
+        }
+        urlsForIterationInLevel.add(url);
+        sharedGeneralUniqueUrls.add(url);
 
         while (depth.get() <= maxDepth) {
             ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-            //to sum up the quinine urls for each level and the reset the list
-            Set<String> finalUniqueUrlsPerLevel = new ConcurrentSkipListSet<>(sharedUniqueUrlsPerLevel);
-            sharedUniqueUrlsPerLevel = new ConcurrentSkipListSet<>();
-            
-            for (String extractedUrl : finalUniqueUrlsPerLevel) {
+
+            final Set<String> sharedUrlsFoundInLevel = new ConcurrentSkipListSet<>();
+
+            for (String extractedUrl : urlsForIterationInLevel) {
                 CrawlingWorker finalWorker1 = new CrawlingWorker(maxUrls, extractedUrl, depth.get(), crossLevelUniqueness);
-                executorService.submit(() -> finalWorker1.execute(sharedGeneralUniqueUrls, sharedUniqueUrlsPerLevel));
+                executorService.submit(() -> finalWorker1.execute(sharedGeneralUniqueUrls, sharedUrlsFoundInLevel));
             }
             executorService.shutdown();
             //waits for all the threads finished they task or until all the threads of the-sam level finished the tasks
@@ -45,6 +46,9 @@ public class CrawlerManager {
             } catch (InterruptedException e) {
                 log.error("Thread execution was interrupted: {}", e.getMessage());
             }
+
+            //To sum up the quinine urls for each level and the reset the list
+            urlsForIterationInLevel = sharedUrlsFoundInLevel;
             depth.set(depth.get() + 1);
         }
 

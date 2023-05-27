@@ -7,8 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 class UrlExtractorTest {
 
@@ -29,9 +29,9 @@ class UrlExtractorTest {
     }
 
     @Test
-    void testExtract_should_return_unis_urls() {
-        Set<String> generalUniqueUrls = new HashSet<>();
-        Set<String> currentUniqueUrlsPeLevel = new HashSet<>();
+    void testExtract_should_return_uniques_urls_cross_levels() {
+        Set<String> generalUniqueUrls = new ConcurrentSkipListSet<>();
+        Set<String> currentUniqueUrlsPeLevel = new ConcurrentSkipListSet<>();
 
 
         generalUniqueUrls.add("https://www.example3.com");
@@ -60,9 +60,9 @@ class UrlExtractorTest {
     }
 
     @Test
-    void testExtract_should_return_uniques_urls() {
-        Set<String> generalUniqueUrls = new HashSet<>();
-        Set<String> currentUniqueUrlsPeLevel = new HashSet<>();
+    void testExtract_should_return_urls() {
+        Set<String> generalUniqueUrls = new ConcurrentSkipListSet<>();
+        Set<String> currentUniqueUrlsPeLevel = new ConcurrentSkipListSet<>();
 
         generalUniqueUrls.add("https://www.example3.com");
         generalUniqueUrls.add("https://www.example4.com");
@@ -76,15 +76,9 @@ class UrlExtractorTest {
         extractor.extract(generalUniqueUrls, currentUniqueUrlsPeLevel, false);
 
         Assertions.assertEquals(3, currentUniqueUrlsPeLevel.size());
-        Assertions.assertEquals(6, generalUniqueUrls.size());
+        Assertions.assertEquals(5, generalUniqueUrls.size());
         Assertions.assertTrue(currentUniqueUrlsPeLevel.contains("https://www.example.com"));
         Assertions.assertTrue(currentUniqueUrlsPeLevel.contains("https://www.example2.com"));
         Assertions.assertTrue(currentUniqueUrlsPeLevel.contains("https://www.example6.com"));
-        Assertions.assertTrue(generalUniqueUrls.contains("https://www.example.com"));
-        Assertions.assertTrue(generalUniqueUrls.contains("https://www.example2.com"));
-        Assertions.assertTrue(generalUniqueUrls.contains("https://www.example3.com"));
-        Assertions.assertTrue(generalUniqueUrls.contains("https://www.example4.com"));
-        Assertions.assertTrue(generalUniqueUrls.contains("https://www.example5.com"));
-        Assertions.assertTrue(generalUniqueUrls.contains("https://www.example6.com"));
     }
 }

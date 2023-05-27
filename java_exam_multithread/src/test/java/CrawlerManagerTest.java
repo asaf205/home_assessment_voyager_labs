@@ -12,7 +12,8 @@ class CrawlerManagerTest {
         boolean crossLevelUniqueness = true;
 
         crawlerManager.processUrl(maxUrls, maxDepth, url, crossLevelUniqueness);
-        Assertions.assertTrue(crawlerManager.getAllUrls().isEmpty());
+        Assertions.assertEquals(1,crawlerManager.getAllUrls().size());
+        Assertions.assertTrue(crawlerManager.getAllUrls().contains(url));
 
     }
 
@@ -25,7 +26,8 @@ class CrawlerManagerTest {
         boolean crossLevelUniqueness = true;
 
         crawlerManager.processUrl(maxUrls, maxDepth, url, crossLevelUniqueness);
-        Assertions.assertTrue(crawlerManager.getAllUrls().isEmpty());
+        Assertions.assertEquals(1,crawlerManager.getAllUrls().size());
+        Assertions.assertTrue(crawlerManager.getAllUrls().contains(url));
     }
 
     @Test

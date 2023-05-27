@@ -31,14 +31,13 @@ public class CrawlingWorker {
         this.url = url;
     }
 
-    public void execute(Set<String> generalUniqueUrls, Set<String> UniqueUrlsPerLevel) {
-        extractor.extract(generalUniqueUrls, UniqueUrlsPerLevel, crossLevelUniqueness);
+    public void execute(Set<String> sharedGeneralUniqueUrls, Set<String> sharedUrlsFoundInLevel) {
+        extractor.extract(sharedGeneralUniqueUrls, sharedUrlsFoundInLevel, crossLevelUniqueness);
         savePage(url,depth, extractor.getDocument().html());
         log.info("Executed CrawlingWorker for URL: {}, Depth: {}, Thread: {}", url, depth, Thread.currentThread().getName());
     }
 
     public void savePage(String url, int depth, String html) {
-
         String fileName = url.replaceFirst("^(http[s]?://)", "")
                 .replaceAll("[^a-zA-Z0-9-_\\.]", "_") + ".html";
         String folderName = String.valueOf(depth);

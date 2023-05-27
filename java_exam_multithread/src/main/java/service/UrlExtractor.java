@@ -22,32 +22,30 @@ public class UrlExtractor {
     }
 
     //extract urls from the document
-    public void extract(Set<String> generalUniqueUrls, Set<String> currentUniqueUrlsPeLevel, boolean crossLevelUniqueness) {
+    public void extract(Set<String> sharedGeneralUniqueUrls, Set<String> sharedUrlsFoundInLevel, boolean crossLevelUniqueness) {
         if (document == null){
             return;
         }
-        List<String> hrefList = document.select("a[href]").eachAttr("abs:href");
+        Set<String> hrefList = Set.copyOf(document.select("a[href]").eachAttr("abs:href"));
         int sumOfTheNewAddedUrls = 0;
         log.info("Number of links found: {}", hrefList.size());
         for (String link : hrefList) {
-
             if (maxUrls <= sumOfTheNewAddedUrls) {
-                continue;
+                break;
             }
             if (!validator.isValidUrl(link)) {
                 log.info("The URL {} is not valid", link);
                 continue;
             }
             if (crossLevelUniqueness) {
-                if (!generalUniqueUrls.contains(link)) {
-                    generalUniqueUrls.add(link);
-                    currentUniqueUrlsPeLevel.add(link);
+                if (!sharedGeneralUniqueUrls.contains(link)) {
+                    sharedGeneralUniqueUrls.add(link);
+                    sharedUrlsFoundInLevel.add(link);
                     sumOfTheNewAddedUrls++;
                     log.debug("Added URL: {} (Cross-level uniqueness)", link);
                 }
             } else {
-                generalUniqueUrls.add(link);
-                currentUniqueUrlsPeLevel.add(link);
+                sharedUrlsFoundInLevel.add(link);
                 sumOfTheNewAddedUrls++;
                 log.debug("Added URL: {}", link);
             }
